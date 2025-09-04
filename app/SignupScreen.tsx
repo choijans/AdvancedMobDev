@@ -42,9 +42,9 @@ export default function SignupScreen() {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => router.push("/LoginScreen")}>
+              <Text style={styles.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
 
       <Text style={styles.connectText}>Sign Up With</Text>
 

@@ -22,7 +22,7 @@ export default function LoginScreen() {
 
       <Text style={styles.forgot}>Forgot password?</Text>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push("/drawer/PlaylistsScreen")}>
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
 

@@ -1,22 +1,50 @@
-# 📱 Advanced Mobile Development - Jansen Choi Kai Xuan  
+# Welcome to your Expo app 👋
 
-## First Activity: Setup App  
-| Screenshot 1 | Screenshot 2 |
-|--------------|--------------|
-| <img src="https://github.com/user-attachments/assets/23781a84-f8fc-4da4-8c31-f14f1d10cc96" width="500"/> | <img src="https://github.com/user-attachments/assets/f69d3f28-6aab-438a-b875-59e9818dcec2" width="500"/> |
+This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
----
+## Get started
 
-##  Second Activity: Component Showcase  
-| Component 1 | Component 2 |
-|-------------|-------------|
-| <img src="https://github.com/user-attachments/assets/8ee9663d-9712-43ef-843d-9b12a7f514f7" width="250"/> | <img src="https://github.com/user-attachments/assets/d9395170-c90e-4b62-a10e-f60864cb54a1" width="250"/> |
+1. Install dependencies
 
----
+   ```bash
+   npm install
+   ```
 
-## Spotify Pages  
-I also enabled **TalkBack** in the Android Emulator so there are voices narrating when using the app.  
+2. Start the app
 
-| Page 1 | Page 2 | Page 3 |
-|--------|--------|--------|
-| <img src="https://github.com/user-attachments/assets/13aa4665-842b-4188-9e16-f1dfcf3d5ee5" width="250"/> | <img src="https://github.com/user-attachments/assets/8dd177a9-c628-4528-828f-dfe0787b9aea" width="250"/> | <img src="https://github.com/user-attachments/assets/0af603a6-a7ca-40d9-b509-7481f3aa79c8" width="250"/> |
+   ```bash
+   npx expo start
+   ```
+
+In the output, you'll find options to open the app in a
+
+- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
+- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+
+You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+
+## Get a fresh project
+
+When you're ready, run:
+
+```bash
+npm run reset-project
+```
+
+This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+
+## Learn more
+
+To learn more about developing your project with Expo, look at the following resources:
+
+- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
+- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+
+## Join the community
+
+Join our community of developers creating universal apps.
+
+- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
+- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
