@@ -1,50 +1,39 @@
-# Welcome to your Expo app 👋
+## Week 1 – Project Setup and Component Showcase
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+In the first week, I set up the project and explored **basic UI components** in React Native such as buttons, images, text, and views.
 
-## Get started
+---
 
-1. Install dependencies
+### ⚙️ Project Setup & Component Showcase
+| Project Setup | Component Showcase |
+|---------------|--------------------|
+| <img width="400" src="https://github.com/user-attachments/assets/4eb6dfba-0881-4f6e-a2cd-0f6f4b2f4eca" /> | <img width="400" src="https://github.com/user-attachments/assets/6ab398c1-df92-47dc-b16a-ec119ec7e961" /> |
 
-   ```bash
-   npm install
-   ```
+---
 
-2. Start the app
+### 🖼️ Component Showcase Page & Button Functionality
+| Component Showcase Page | Button Functionality |
+|--------------------------|----------------------|
+| <img width="350" src="https://github.com/user-attachments/assets/4aab1298-5a67-45cf-b1f3-7d868c19c91a" /> | <img width="350" src="https://github.com/user-attachments/assets/923b29e2-4fc2-4454-bde6-a4963fa140ca" /> |
 
-   ```bash
-   npx expo start
-   ```
+## Week 2 – Welcome, Authentication, and Navigation
 
-In the output, you'll find options to open the app in a
+In the second week, I worked on the **Welcome** and **Authentication pages** (Sign-In and Sign-Up), as well as navigation features including the **Playlists, Profile, Settings pages**, and a **Drawer Navigation menu**.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### 🔑 Welcome & Authentication Pages
+Welcome Page, Spotify Sign-In, and Spotify Sign-Up
 
-## Get a fresh project
+| Welcome Page | Sign-In | Sign-Up |
+|--------------|---------|---------|
+| <img width="250" src="https://github.com/user-attachments/assets/2f039740-2a2d-42b5-a37e-654e97cf11f2" /> | <img width="250" src="https://github.com/user-attachments/assets/93b3aa43-f93f-4817-9c85-eb046899f3f6" /> | <img width="250" src="https://github.com/user-attachments/assets/db7258d6-ff7b-4fda-8e58-cf06ac7bbd36" /> |
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
-```
+### 📱 Navigation Features
+Playlists Page, Profile Page, Settings Page, and Drawer Navigation
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+| Playlists | Profile | Settings | Drawer |
+|-----------|---------|----------|--------|
+| <img width="220" src="https://github.com/user-attachments/assets/03dbd650-6acf-4d25-b0cf-458b7e8ce061" /> | <img width="220" src="https://github.com/user-attachments/assets/a4acb428-ef71-4ebf-8b05-609429323504" /> | <img width="220" src="https://github.com/user-attachments/assets/208eef9a-8610-4157-aa2d-48813744ee27" /> | <img width="220" src="https://github.com/user-attachments/assets/b58551c4-4908-43d6-b6bf-764c7cbc9cc1" /> |
