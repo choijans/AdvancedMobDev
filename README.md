@@ -37,3 +37,12 @@ Playlists Page, Profile Page, Settings Page, and Drawer Navigation
 | Playlists | Profile | Settings | Drawer |
 |-----------|---------|----------|--------|
 | <img width="220" src="https://github.com/user-attachments/assets/03dbd650-6acf-4d25-b0cf-458b7e8ce061" /> | <img width="220" src="https://github.com/user-attachments/assets/a4acb428-ef71-4ebf-8b05-609429323504" /> | <img width="220" src="https://github.com/user-attachments/assets/208eef9a-8610-4157-aa2d-48813744ee27" /> | <img width="220" src="https://github.com/user-attachments/assets/b58551c4-4908-43d6-b6bf-764c7cbc9cc1" /> |
+
+---
+
+### Week 4 Activity 1
+Created a Playlists detail screen and added state and reducer functionality, I also implemented async storage and tested by closing the app and reopening them. When I reopened the app, the songs are still there. 
+
+| Add Playlists with Swipe for Delete | Adding Songs, Undo, Redo, Clear with Swipe for Delete |
+|-----------|---------|
+| <img width="220" alt="image" src="https://github.com/user-attachments/assets/4536ee97-71d5-4832-9de5-b1898d1fe306" /> | <img width="220" src="https://github.com/user-attachments/assets/8cbfd448-a62e-493b-8f4e-60791909556a" /> |
