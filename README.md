@@ -14,7 +14,7 @@ In the first week, I set up the project and explored **basic UI components** in 
 ### 🖼️ Component Showcase Page & Button Functionality
 | Component Showcase Page | Button Functionality |
 |--------------------------|----------------------|
-| <img width="350" src="https://github.com/user-attachments/assets/4aab1298-5a67-45cf-b1f3-7d868c19c91a" /> | <img width="350" src="https://github.com/user-attachments/assets/923b29e2-4fc2-4454-bde6-a4963fa140ca" /> |
+| <img width="200" src="https://github.com/user-attachments/assets/4aab1298-5a67-45cf-b1f3-7d868c19c91a" /> | <img width="200" src="https://github.com/user-attachments/assets/923b29e2-4fc2-4454-bde6-a4963fa140ca" /> |
 
 ## Week 2 – Welcome, Authentication, and Navigation
 
@@ -27,7 +27,7 @@ Welcome Page, Spotify Sign-In, and Spotify Sign-Up
 
 | Welcome Page | Sign-In | Sign-Up |
 |--------------|---------|---------|
-| <img width="250" src="https://github.com/user-attachments/assets/2f039740-2a2d-42b5-a37e-654e97cf11f2" /> | <img width="250" src="https://github.com/user-attachments/assets/93b3aa43-f93f-4817-9c85-eb046899f3f6" /> | <img width="250" src="https://github.com/user-attachments/assets/db7258d6-ff7b-4fda-8e58-cf06ac7bbd36" /> |
+| <img width="200" src="https://github.com/user-attachments/assets/2f039740-2a2d-42b5-a37e-654e97cf11f2" /> | <img width="200" src="https://github.com/user-attachments/assets/93b3aa43-f93f-4817-9c85-eb046899f3f6" /> | <img width="200" src="https://github.com/user-attachments/assets/db7258d6-ff7b-4fda-8e58-cf06ac7bbd36" /> |
 
 ---
 
@@ -46,3 +46,11 @@ Created a Playlists detail screen and added state and reducer functionality, I a
 | Add Playlists with Swipe for Delete | Adding Songs, Undo, Redo, Clear with Swipe for Delete |
 |-----------|---------|
 | <img width="220" alt="image" src="https://github.com/user-attachments/assets/4536ee97-71d5-4832-9de5-b1898d1fe306" /> | <img width="220" src="https://github.com/user-attachments/assets/8cbfd448-a62e-493b-8f4e-60791909556a" /> |
+
+In this activity, we created a profile screen form wherein we can update the text values of our profile section dynamically everytime the text is written. I added animations alongside it wherein when you submit and the input form is invalid, it will shake. Other than that, I made the profile picture editable by choosing a image found in the local storage of the emulator.
+| Profile Screen Form |  Tested the input validation | Image Change | Profile Updated Successfully and changed profile data |
+|-----------|---------|---------|---------|
+|  <img width="220" alt="image" src="https://github.com/user-attachments/assets/33417eae-686e-4a62-b498-1c79b467e08c" /> | <img width="200" alt="image" src="https://github.com/user-attachments/assets/eff75638-13b0-4b2e-8d8d-b8822a5960b6" /> |<img width="200" alt="image" src="https://github.com/user-attachments/assets/6375a193-ada1-4dd7-b414-a050fcd9e3a0" /> | <img width="200" src="https://github.com/user-attachments/assets/69c58b4e-377a-42ee-a9dc-79358af3285b" /> |
+
+
+
