@@ -1,12 +1,12 @@
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
 import { FontAwesome } from "@expo/vector-icons";
-import { View, Text, StyleSheet } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
+import { StyleSheet, Text, View } from "react-native";
 
 // Screens
-import PlaylistsScreen from "./PlaylistsScreen";
 import PlaylistDetailScreen from "./PlaylistDetailScreen"; // 👈 import your detail screen
+import PlaylistsScreen from "./PlaylistsScreen";
 import ProfileScreen from "./ProfileScreen";
 import SettingsScreen from "./SettingsScreen";
 
@@ -27,7 +27,7 @@ function PlaylistsStack() {
         name="PlaylistDetail"
         component={PlaylistDetailScreen}
         options={({ route }) => ({
-          title: route.params?.playlistName || "Playlist",
+          title: (route.params as any)?.playlistName || "Playlist",
           headerStyle: { backgroundColor: "#000" },
           headerTintColor: "#fff",
         })}
@@ -90,24 +90,24 @@ function CustomDrawerContent(props: any) {
     <DrawerContentScrollView {...props} style={{ backgroundColor: "#121212" }}>
       <View style={styles.drawerHeader}>
         <FontAwesome name="spotify" size={40} color="#1DB954" />
-        <Text style={styles.drawerTitle}>Jansen Choi</Text>
+        <Text style={[styles.drawerTitle, { color: "#fff" }]}>Jansen Choi</Text>
       </View>
 
       <DrawerItem
         label="Playlists"
-        labelStyle={styles.drawerLabel}
+        labelStyle={[styles.drawerLabel, { color: "#fff" }]}
         icon={({ size }) => <FontAwesome name="music" size={size} color="#1DB954" />}
         onPress={() => props.navigation.navigate("Tabs", { screen: "Playlists" })}
       />
       <DrawerItem
         label="Profile"
-        labelStyle={styles.drawerLabel}
+        labelStyle={[styles.drawerLabel, { color: "#fff" }]}
         icon={({ size }) => <FontAwesome name="user" size={size} color="#1DB954" />}
         onPress={() => props.navigation.navigate("Tabs", { screen: "ProfileScreen" })}
       />
       <DrawerItem
         label="Settings"
-        labelStyle={styles.drawerLabel}
+        labelStyle={[styles.drawerLabel, { color: "#fff" }]}
         icon={({ size }) => <FontAwesome name="cog" size={size} color="#1DB954" />}
         onPress={() => props.navigation.navigate("Tabs", { screen: "SettingsScreen" })}
       />
@@ -115,6 +115,7 @@ function CustomDrawerContent(props: any) {
   );
 }
 
+// 👇 Simple DrawerLayout without Redux Provider
 export default function DrawerLayout() {
   return (
     <Drawer.Navigator
@@ -123,8 +124,7 @@ export default function DrawerLayout() {
         headerShown: false,
         drawerType: "front",
         overlayColor: "rgba(0,0,0,0.5)",
-        sceneContainerStyle: { backgroundColor: "#000" },
-        drawerStyle: { width: "70%", backgroundColor: "#121212" },
+        drawerStyle: { width: "70%" },
         swipeEnabled: true,
       }}
     >
@@ -142,6 +142,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
   },
-  drawerTitle: { color: "#fff", fontSize: 20, fontWeight: "bold" },
-  drawerLabel: { color: "#fff", fontSize: 16 },
+  drawerTitle: { fontSize: 20, fontWeight: "bold" },
+  drawerLabel: { fontSize: 16 },
 });

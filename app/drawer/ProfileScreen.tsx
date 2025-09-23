@@ -1,31 +1,36 @@
-import React, { useEffect, useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import { LinearGradient } from "expo-linear-gradient";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+    Image,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from "react-native";
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSequence,
-  withTiming,
-  FadeIn,
+    FadeIn,
+    useAnimatedStyle,
+    useSharedValue,
+    withSequence,
+    withTiming,
 } from "react-native-reanimated";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 const genres = ["Pop", "Rock", "Jazz", "Classical", "Hip-Hop"];
 const defaultAvatar = require("../../assets/images/default-avatar.png");
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
+
+  // Theme from Redux
+  const mode = useSelector((state: RootState) => state.theme.mode);
+  const accentColor = useSelector((state: RootState) => state.theme.accentColor);
 
   // profile data
   const [profileUsername, setProfileUsername] = useState("jansen choi kai xuan");
@@ -46,6 +51,40 @@ export default function ProfileScreen() {
   const shakeXUsername = useSharedValue(0);
   const shakeXEmail = useSharedValue(0);
 
+  // Theme animations
+  const bgColor = useSharedValue(mode === "light" ? "#fff" : "#121212");
+  const textColor = useSharedValue(mode === "light" ? "#000" : "#fff");
+  const inputBgColor = useSharedValue(mode === "light" ? "#f5f5f5" : "#1e1e1e");
+  const headerTextColor = useSharedValue(mode === "light" ? "#000" : "#fff");
+  const gradientStart = useSharedValue(mode === "light" ? "#f0f0f0" : "#2a2a2a");
+  const gradientEnd = useSharedValue(mode === "light" ? "#e0e0e0" : "#121212");
+
+  useEffect(() => {
+    if (mode === "light") {
+      bgColor.value = withTiming("#fff", { duration: 400 });
+      textColor.value = withTiming("#000", { duration: 400 });
+      inputBgColor.value = withTiming("#f5f5f5", { duration: 400 });
+      headerTextColor.value = withTiming("#000", { duration: 400 });
+      gradientStart.value = withTiming("#f0f0f0", { duration: 400 });
+      gradientEnd.value = withTiming("#e0e0e0", { duration: 400 });
+    } else if (mode === "dark") {
+      bgColor.value = withTiming("#121212", { duration: 400 });
+      textColor.value = withTiming("#fff", { duration: 400 });
+      inputBgColor.value = withTiming("#1e1e1e", { duration: 400 });
+      headerTextColor.value = withTiming("#fff", { duration: 400 });
+      gradientStart.value = withTiming("#2a2a2a", { duration: 400 });
+      gradientEnd.value = withTiming("#121212", { duration: 400 });
+    } else {
+      // custom theme
+      bgColor.value = withTiming("#121212", { duration: 400 });
+      textColor.value = withTiming("#fff", { duration: 400 });
+      inputBgColor.value = withTiming("#1e1e1e", { duration: 400 });
+      headerTextColor.value = withTiming("#fff", { duration: 400 });
+      gradientStart.value = withTiming("#2a2a2a", { duration: 400 });
+      gradientEnd.value = withTiming("#121212", { duration: 400 });
+    }
+  }, [mode]);
+
   useEffect(() => {
     fadeIn.value = withTiming(1, { duration: 600 });
     loadCache();
@@ -53,6 +92,23 @@ export default function ProfileScreen() {
 
   const animatedProfileStyle = useAnimatedStyle(() => ({
     opacity: fadeIn.value,
+  }));
+
+  const animatedContainerStyle = useAnimatedStyle(() => ({
+    backgroundColor: bgColor.value,
+  }));
+
+  const animatedHeaderTextStyle = useAnimatedStyle(() => ({
+    color: headerTextColor.value,
+  }));
+
+  const animatedTextStyle = useAnimatedStyle(() => ({
+    color: textColor.value,
+  }));
+
+  const animatedInputStyle = useAnimatedStyle(() => ({
+    backgroundColor: inputBgColor.value,
+    color: textColor.value,
   }));
 
   const shakeStyleUsername = useAnimatedStyle(() => ({
@@ -162,27 +218,30 @@ export default function ProfileScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <Animated.ScrollView style={[styles.container, animatedContainerStyle]}>
       {/* Header */}
       <View style={styles.headerRow}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <FontAwesome name="bars" size={28} color="#1DB954" />
+        <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+          <FontAwesome name="bars" size={28} color={accentColor} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Profile</Text>
+        <Animated.Text style={[styles.headerTitle, animatedHeaderTextStyle]}>Profile</Animated.Text>
       </View>
 
       {/* Dynamic Profile */}
       <Animated.View style={[animatedProfileStyle]}>
-        <LinearGradient colors={["#2a2a2a", "#121212"]} style={styles.header}>
+        <LinearGradient 
+          colors={mode === "light" ? ["#f0f0f0", "#e0e0e0"] : ["#2a2a2a", "#121212"]} 
+          style={styles.header}
+        >
           <TouchableOpacity onPress={pickImage}>
-            <Image source={avatar} style={styles.avatar} />
+            <Image source={avatar} style={[styles.avatar, { borderColor: accentColor }]} />
           </TouchableOpacity>
           <View style={{ alignItems: "center" }}>
-            <Text style={styles.name}>{profileUsername || "Your Name"}</Text>
-            <Text style={styles.email}>{profileEmail || "your@email.com"}</Text>
-            <Text style={styles.genre}>
+            <Animated.Text style={[styles.name, { color: mode === "light" ? "#000" : "#fff" }]}>{profileUsername || "Your Name"}</Animated.Text>
+            <Animated.Text style={[styles.email, { color: mode === "light" ? "#666" : "#bbb" }]}>{profileEmail || "your@email.com"}</Animated.Text>
+            <Animated.Text style={[styles.genre, { color: mode === "light" ? "#666" : "#bbb" }]}>
               Favorite genre: {profileGenre || "Not selected"}
-            </Text>
+            </Animated.Text>
           </View>
         </LinearGradient>
       </Animated.View>
@@ -192,9 +251,9 @@ export default function ProfileScreen() {
         {/* Username */}
         <Animated.View style={[shakeStyleUsername]}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: mode === "light" ? "#f5f5f5" : "#1e1e1e", color: mode === "light" ? "#000" : "#fff" }]}
             placeholder="Enter username"
-            placeholderTextColor="#888"
+            placeholderTextColor={mode === "light" ? "#666" : "#888"}
             value={username}
             onChangeText={(text) => {
               setUsername(text);
@@ -211,9 +270,9 @@ export default function ProfileScreen() {
         {/* Email */}
         <Animated.View style={[shakeStyleEmail]}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: mode === "light" ? "#f5f5f5" : "#1e1e1e", color: mode === "light" ? "#000" : "#fff" }]}
             placeholder="Enter email"
-            placeholderTextColor="#888"
+            placeholderTextColor={mode === "light" ? "#666" : "#888"}
             keyboardType="email-address"
             value={email}
             onChangeText={(text) => {
@@ -233,7 +292,11 @@ export default function ProfileScreen() {
           {genres.map((g) => (
             <TouchableOpacity
               key={g}
-              style={[styles.genreOption, genre === g && styles.genreSelected]}
+              style={[
+                styles.genreOption, 
+                { backgroundColor: mode === "light" ? "#f5f5f5" : "#1e1e1e" },
+                genre === g && { backgroundColor: accentColor }
+              ]}
               onPress={() => {
                 setGenre(g);
                 validate("genre", g);
@@ -242,7 +305,8 @@ export default function ProfileScreen() {
               <Text
                 style={[
                   styles.genreText,
-                  genre === g && styles.genreTextSelected,
+                  { color: mode === "light" ? "#000" : "#fff" },
+                  genre === g && { color: mode === "custom" ? "#fff" : "#000", fontWeight: "bold" },
                 ]}
               >
                 {g}
@@ -257,8 +321,8 @@ export default function ProfileScreen() {
         ) : null}
 
         {/* Submit */}
-        <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
-          <Text style={styles.submitText}>Submit</Text>
+        <TouchableOpacity style={[styles.submitBtn, { backgroundColor: accentColor }]} onPress={handleSubmit}>
+          <Text style={[styles.submitText, { color: mode === "custom" ? "#fff" : "#000" }]}>Submit</Text>
         </TouchableOpacity>
 
         {success ? (
@@ -270,19 +334,19 @@ export default function ProfileScreen() {
           </Animated.Text>
         ) : null}
       </View>
-    </ScrollView>
+    </Animated.ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#121212" },
+  container: { flex: 1 },
   headerRow: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 15,
   },
-  headerTitle: { color: "#fff", fontSize: 20, fontWeight: "bold", marginLeft: 15 },
+  headerTitle: { fontSize: 20, fontWeight: "bold", marginLeft: 15 },
   header: {
     alignItems: "center",
     justifyContent: "center",
@@ -297,18 +361,15 @@ const styles = StyleSheet.create({
     borderRadius: 70,
     marginBottom: 15,
     borderWidth: 3,
-    borderColor: "#1DB954",
   },
-  name: { color: "#fff", fontSize: 26, fontWeight: "bold" },
-  email: { color: "#bbb", fontSize: 14, marginTop: 4 },
-  genre: { color: "#bbb", fontSize: 14, marginTop: 2 },
+  name: { fontSize: 26, fontWeight: "bold" },
+  email: { fontSize: 14, marginTop: 4 },
+  genre: { fontSize: 14, marginTop: 2 },
   form: { paddingHorizontal: 20, marginTop: 20 },
   input: {
-    backgroundColor: "#1e1e1e",
     borderRadius: 8,
     padding: 12,
     marginBottom: 8,
-    color: "#fff",
   },
   error: { color: "red", fontSize: 13, marginBottom: 6 },
   genreRow: {
@@ -319,20 +380,17 @@ const styles = StyleSheet.create({
   genreOption: {
     paddingVertical: 8,
     paddingHorizontal: 15,
-    backgroundColor: "#1e1e1e",
     borderRadius: 20,
     margin: 5,
   },
-  genreSelected: { backgroundColor: "#1DB954" },
-  genreText: { color: "#fff" },
-  genreTextSelected: { color: "#000", fontWeight: "bold" },
+  genreText: {},
+  genreTextSelected: { fontWeight: "bold" },
   submitBtn: {
-    backgroundColor: "#1DB954",
     padding: 14,
     borderRadius: 8,
     alignItems: "center",
     marginTop: 10,
   },
-  submitText: { color: "#000", fontWeight: "bold" },
+  submitText: { fontWeight: "bold" },
 });
 

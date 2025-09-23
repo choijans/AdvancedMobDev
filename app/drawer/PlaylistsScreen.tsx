@@ -1,18 +1,24 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
-import { useNavigation, DrawerActions } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Swipeable } from "react-native-gesture-handler"; // 👈 Import Swipeable
+import { DrawerActions, useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from "react-native";
+import { Swipeable } from "react-native-gesture-handler";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 const goodMorning = [
   { id: "1", title: "Today's Top Hits", image: "https://picsum.photos/200/200?random=1" },
@@ -36,6 +42,45 @@ export default function PlaylistsScreen() {
   const navigation = useNavigation();
   const [playlists, setPlaylists] = useState<{ id: string; name: string; image: string }[]>([]);
   const [newPlaylist, setNewPlaylist] = useState("");
+
+  // 🔥 Theme from Redux
+  const mode = useSelector((state: RootState) => state.theme.mode);
+  const accentColor = useSelector((state: RootState) => state.theme.accentColor);
+
+  // Shared animation values
+  const bgColor = useSharedValue(mode === "light" ? "#fff" : "#121212");
+  const textColor = useSharedValue(mode === "light" ? "#000" : "#fff");
+  const cardColor = useSharedValue(mode === "light" ? "#f2f2f2" : "#282828");
+  const inputBg = useSharedValue(mode === "light" ? "#e5e5e5" : "#282828");
+
+  // Animate on theme change
+  useEffect(() => {
+    if (mode === "light") {
+      bgColor.value = withTiming("#fff", { duration: 400 });
+      textColor.value = withTiming("#000", { duration: 400 });
+      cardColor.value = withTiming("#f2f2f2", { duration: 400 });
+      inputBg.value = withTiming("#e5e5e5", { duration: 400 });
+    } else {
+      bgColor.value = withTiming("#121212", { duration: 400 });
+      textColor.value = withTiming("#fff", { duration: 400 });
+      cardColor.value = withTiming("#282828", { duration: 400 });
+      inputBg.value = withTiming("#282828", { duration: 400 });
+    }
+  }, [mode]);
+
+  const animatedContainerStyle = useAnimatedStyle(() => ({
+    backgroundColor: bgColor.value,
+  }));
+  const animatedTextStyle = useAnimatedStyle(() => ({
+    color: textColor.value,
+  }));
+  const animatedCardStyle = useAnimatedStyle(() => ({
+    backgroundColor: cardColor.value,
+  }));
+  const animatedInputStyle = useAnimatedStyle(() => ({
+    backgroundColor: inputBg.value,
+    color: textColor.value,
+  }));
 
   useEffect(() => {
     const loadPlaylists = async () => {
@@ -64,7 +109,6 @@ export default function PlaylistsScreen() {
     setPlaylists(playlists.filter((p) => p.id !== id));
   };
 
-  // 👇 Render delete action when swiped
   const renderRightActions = (id: string) => (
     <TouchableOpacity style={styles.deleteButton} onPress={() => removePlaylist(id)}>
       <FontAwesome name="trash" size={20} color="#fff" />
@@ -73,67 +117,88 @@ export default function PlaylistsScreen() {
   );
 
   return (
-    <ScrollView style={styles.container}>
+    <Animated.ScrollView style={[styles.container, animatedContainerStyle]}>
       {/* Header */}
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-          <FontAwesome name="bars" size={20} color="#1DB954" />
+          <FontAwesome name="bars" size={20} color={accentColor} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Good morning</Text>
+        <Animated.Text style={[styles.headerTitle, animatedTextStyle]}>
+          Good morning
+        </Animated.Text>
       </View>
 
       {/* Sections */}
       <View style={styles.grid}>
         {goodMorning.map((item) => (
-          <TouchableOpacity key={item.id} style={styles.gridItem}>
-            <Image source={{ uri: item.image }} style={styles.gridImage} />
-            <Text style={styles.gridText}>{item.title}</Text>
-          </TouchableOpacity>
+          <Animated.View key={item.id} style={[styles.gridItem, animatedCardStyle]}>
+            <TouchableOpacity>
+              <Image source={{ uri: item.image }} style={styles.gridImage} />
+              <Animated.Text style={[styles.gridText, animatedTextStyle]}>
+                {item.title}
+              </Animated.Text>
+            </TouchableOpacity>
+          </Animated.View>
         ))}
       </View>
 
-      <Text style={styles.sectionTitle}>Made For You</Text>
+      <Animated.Text style={[styles.sectionTitle, animatedTextStyle]}>
+        Made For You
+      </Animated.Text>
       <FlatList
         horizontal
         data={madeForYou}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.card}>
+          <Animated.View style={[styles.card, animatedCardStyle]}>
             <Image source={{ uri: item.image }} style={styles.cardImage} />
-            <Text style={styles.cardTitle}>{item.title}</Text>
-            <Text style={styles.cardSubtitle}>{item.subtitle}</Text>
-          </View>
+            <Animated.Text style={[styles.cardTitle, animatedTextStyle]}>
+              {item.title}
+            </Animated.Text>
+            <Animated.Text style={[styles.cardSubtitle, animatedTextStyle]}>
+              {item.subtitle}
+            </Animated.Text>
+          </Animated.View>
         )}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingRight: 20 }}
       />
 
-      <Text style={styles.sectionTitle}>Popular playlists</Text>
+      <Animated.Text style={[styles.sectionTitle, animatedTextStyle]}>
+        Popular playlists
+      </Animated.Text>
       <FlatList
         horizontal
         data={popular}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.card}>
+          <Animated.View style={[styles.card, animatedCardStyle]}>
             <Image source={{ uri: item.image }} style={styles.cardImage} />
-            <Text style={styles.cardTitle}>{item.title}</Text>
-          </View>
+            <Animated.Text style={[styles.cardTitle, animatedTextStyle]}>
+              {item.title}
+            </Animated.Text>
+          </Animated.View>
         )}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingRight: 20 }}
       />
 
-      {/* 👇 Your Playlists */}
-      <Text style={styles.sectionTitle}>Your Playlists</Text>
+      {/* Your Playlists */}
+      <Animated.Text style={[styles.sectionTitle, animatedTextStyle]}>
+        Your Playlists
+      </Animated.Text>
       <View style={styles.playlistInputRow}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { 
+            backgroundColor: mode === "light" ? "#e5e5e5" : "#282828",
+            color: mode === "light" ? "#000" : "#fff"
+          }]}
           placeholder="New playlist name"
           placeholderTextColor="#888"
           value={newPlaylist}
           onChangeText={setNewPlaylist}
         />
-        <TouchableOpacity style={styles.addButton} onPress={addPlaylist}>
+        <TouchableOpacity style={[styles.addButton, { backgroundColor: accentColor }]} onPress={addPlaylist}>
           <Text style={styles.addButtonText}>Add</Text>
         </TouchableOpacity>
       </View>
@@ -144,30 +209,33 @@ export default function PlaylistsScreen() {
           renderRightActions={() => renderRightActions(playlist.id)}
           overshootRight={false}
         >
-          <TouchableOpacity
-            style={styles.playlistCard}
-            onPress={() =>
-              navigation.navigate(
-                "PlaylistDetail" as never,
-                { playlistId: playlist.id, playlistName: playlist.name } as never
-              )
-            }
-          >
-            <Image source={{ uri: playlist.image }} style={styles.playlistImage} />
-            <Text style={styles.playlistName}>{playlist.name}</Text>
-          </TouchableOpacity>
+          <Animated.View style={[styles.playlistCard, animatedCardStyle]}>
+            <TouchableOpacity
+              style={{ flexDirection: "row", alignItems: "center" }}
+              onPress={() =>
+                (navigation as any).navigate(
+                  "PlaylistDetail",
+                  { playlistId: playlist.id, playlistName: playlist.name }
+                )
+              }
+            >
+              <Image source={{ uri: playlist.image }} style={styles.playlistImage} />
+              <Animated.Text style={[styles.playlistName, animatedTextStyle]}>
+                {playlist.name}
+              </Animated.Text>
+            </TouchableOpacity>
+          </Animated.View>
         </Swipeable>
       ))}
-    </ScrollView>
+    </Animated.ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#121212", paddingHorizontal: 15, paddingTop: 20 },
-  sectionTitle: { color: "#fff", fontSize: 22, fontWeight: "bold", marginBottom: 15, marginTop: 10 },
+  container: { flex: 1, paddingHorizontal: 15, paddingTop: 20 },
+  sectionTitle: { fontSize: 22, fontWeight: "bold", marginBottom: 15, marginTop: 10 },
   grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" },
   gridItem: {
-    backgroundColor: "#282828",
     width: "48%",
     flexDirection: "row",
     alignItems: "center",
@@ -177,31 +245,30 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   gridImage: { width: 50, height: 50 },
-  gridText: { color: "#fff", marginLeft: 10, flexShrink: 1 },
+  gridText: { marginLeft: 10, flexShrink: 1 },
 
-  card: { marginRight: 15, width: 140 },
+  card: { marginRight: 15, width: 140, borderRadius: 6, padding: 5 },
   cardImage: { width: "100%", height: 140, borderRadius: 6, marginBottom: 8 },
-  cardTitle: { color: "#fff", fontWeight: "600", fontSize: 14 },
-  cardSubtitle: { color: "#aaa", fontSize: 12 },
+  cardTitle: { fontWeight: "600", fontSize: 14 },
+  cardSubtitle: { fontSize: 12 },
 
   headerRow: { flexDirection: "row", alignItems: "center", marginBottom: 20 },
-  headerTitle: { color: "#fff", fontSize: 22, fontWeight: "bold", marginLeft: 10 },
+  headerTitle: { fontSize: 22, fontWeight: "bold", marginLeft: 10 },
 
   playlistInputRow: { flexDirection: "row", alignItems: "center", marginBottom: 15 },
-  input: { flex: 1, backgroundColor: "#282828", color: "#fff", padding: 10, borderRadius: 6, marginRight: 10 },
-  addButton: { backgroundColor: "#1DB954", padding: 10, borderRadius: 6 },
+  input: { flex: 1, padding: 10, borderRadius: 6, marginRight: 10 },
+  addButton: { padding: 10, borderRadius: 6 },
   addButtonText: { color: "#fff", fontWeight: "bold" },
 
   playlistCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#282828",
     padding: 10,
     borderRadius: 6,
     marginBottom: 10,
   },
   playlistImage: { width: 50, height: 50, borderRadius: 6, marginRight: 10 },
-  playlistName: { color: "#fff", fontSize: 16 },
+  playlistName: { fontSize: 16 },
 
   deleteButton: {
     backgroundColor: "red",

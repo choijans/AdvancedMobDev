@@ -1,18 +1,25 @@
-import React, { useReducer, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
-  Image,
-} from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { Swipeable } from "react-native-gesture-handler";
-import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
-import { FontAwesome } from "@expo/vector-icons";
+import React, { useEffect, useReducer, useState } from "react";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Animated, {
+  FadeInRight,
+  FadeOutLeft,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 interface Song {
   id: string;
@@ -40,7 +47,9 @@ function reducer(state: State, action: Action): State {
       const newSong = {
         id: Date.now().toString(),
         title: action.title,
-        image: `https://picsum.photos/200/200?random=${Math.floor(Math.random() * 1000)}`,
+        image: `https://picsum.photos/200/200?random=${Math.floor(
+          Math.random() * 1000
+        )}`,
       };
       const newSongs = [...state.songs, newSong];
       return { songs: newSongs, past: [...state.past, state.songs], future: [] };
@@ -72,12 +81,52 @@ function reducer(state: State, action: Action): State {
 }
 
 export default function PlaylistDetailScreen() {
-  const route = useRoute<RouteProp<{ params: { playlistId: string; playlistName: string } }, "params">>();
+  const route = useRoute<
+    RouteProp<{ params: { playlistId: string; playlistName: string } }, "params">
+  >();
   const { playlistId, playlistName } = route.params;
 
   const [state, dispatch] = useReducer(reducer, { songs: [], past: [], future: [] });
   const [newSong, setNewSong] = useState("");
 
+  // 🎨 Theme from Redux
+  const mode = useSelector((state: RootState) => state.theme.mode);
+  const accentColor = useSelector((state: RootState) => state.theme.accentColor);
+
+  // Animated theme colors
+  const bgColor = useSharedValue(mode === "light" ? "#fff" : "#000");
+  const textColor = useSharedValue(mode === "light" ? "#000" : "#fff");
+  const cardBg = useSharedValue(mode === "light" ? "#f2f2f2" : "#1e1e1e");
+
+  useEffect(() => {
+    if (mode === "light") {
+      bgColor.value = withTiming("#fff", { duration: 400 });
+      textColor.value = withTiming("#000", { duration: 400 });
+      cardBg.value = withTiming("#f2f2f2", { duration: 400 });
+    } else if (mode === "dark") {
+      bgColor.value = withTiming("#000", { duration: 400 });
+      textColor.value = withTiming("#fff", { duration: 400 });
+      cardBg.value = withTiming("#1e1e1e", { duration: 400 });
+    } else {
+      // custom → base dark bg but custom accent already applied
+      bgColor.value = withTiming("#121212", { duration: 400 });
+      textColor.value = withTiming("#fff", { duration: 400 });
+      cardBg.value = withTiming("#1e1e1e", { duration: 400 });
+    }
+  }, [mode]);
+
+  // Animated styles
+  const animatedContainer = useAnimatedStyle(() => ({
+    backgroundColor: bgColor.value,
+  }));
+  const animatedText = useAnimatedStyle(() => ({
+    color: textColor.value,
+  }));
+  const animatedCard = useAnimatedStyle(() => ({
+    backgroundColor: cardBg.value,
+  }));
+
+  // Data persistence
   useEffect(() => {
     loadSongs();
   }, []);
@@ -107,26 +156,25 @@ export default function PlaylistDetailScreen() {
     dispatch({ type: "REMOVE", id });
   };
 
-  const renderRightActions = (id: string) => (
-    <TouchableOpacity style={styles.deleteButton} onPress={() => removeSong(id)}>
-      <FontAwesome name="trash" size={22} color="white" />
-    </TouchableOpacity>
-  );
+
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{playlistName}</Text>
+    <Animated.View style={[styles.container, animatedContainer]}>
+      <Animated.Text style={[styles.title, animatedText]}>{playlistName}</Animated.Text>
 
       {/* Song input */}
       <View style={styles.inputRow}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: mode === 'light' ? '#e5e5e5' : '#1e1e1e', color: mode === 'light' ? '#000' : '#fff' }]}
           placeholder="Enter song name"
           placeholderTextColor="#aaa"
           value={newSong}
           onChangeText={setNewSong}
         />
-        <TouchableOpacity style={styles.addButton} onPress={addSong}>
+        <TouchableOpacity
+          style={[styles.addButton, { backgroundColor: accentColor }]}
+          onPress={addSong}
+        >
           <Text style={styles.addButtonText}>Add</Text>
         </TouchableOpacity>
       </View>
@@ -136,13 +184,23 @@ export default function PlaylistDetailScreen() {
         data={state.songs}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
-            <Swipeable renderRightActions={() => renderRightActions(item.id)}>
-              <View style={styles.songRow}>
-                <Image source={{ uri: item.image }} style={styles.songImage} />
-                <Text style={styles.songTitle}>{item.title}</Text>
-              </View>
-            </Swipeable>
+          <Animated.View
+            entering={FadeInRight}
+            exiting={FadeOutLeft}
+            style={[styles.songRow, animatedCard]}
+          >
+            <View style={styles.songRowContent}>
+              <Image source={{ uri: item.image }} style={styles.songImage} />
+              <Animated.Text style={[styles.songTitle, animatedText]}>
+                {item.title}
+              </Animated.Text>
+              <TouchableOpacity 
+                style={styles.deleteButton} 
+                onPress={() => removeSong(item.id)}
+              >
+                <FontAwesome name="trash" size={18} color="white" />
+              </TouchableOpacity>
+            </View>
           </Animated.View>
         )}
       />
@@ -150,60 +208,61 @@ export default function PlaylistDetailScreen() {
       {/* Controls */}
       <View style={styles.controls}>
         <TouchableOpacity onPress={() => dispatch({ type: "UNDO" })}>
-          <Text style={styles.controlText}>Undo</Text>
+          <Text style={[styles.controlText, { color: accentColor }]}>Undo</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => dispatch({ type: "REDO" })}>
-          <Text style={styles.controlText}>Redo</Text>
+          <Text style={[styles.controlText, { color: accentColor }]}>Redo</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => dispatch({ type: "CLEAR" })}>
-          <Text style={styles.controlText}>Clear</Text>
+          <Text style={[styles.controlText, { color: accentColor }]}>Clear</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#000", padding: 16 },
-  title: { fontSize: 22, fontWeight: "bold", color: "#fff", marginBottom: 16 },
+  container: { flex: 1, padding: 16 },
+  title: { fontSize: 22, fontWeight: "bold", marginBottom: 16 },
   inputRow: { flexDirection: "row", marginBottom: 16 },
   input: {
     flex: 1,
-    backgroundColor: "#1e1e1e",
-    color: "#fff",
     padding: 10,
     borderRadius: 8,
   },
   addButton: {
     marginLeft: 8,
-    backgroundColor: "#1DB954",
     paddingHorizontal: 16,
     justifyContent: "center",
     borderRadius: 8,
   },
   addButtonText: { color: "#fff", fontWeight: "bold" },
   songRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#1e1e1e",
-    padding: 12,
     borderRadius: 8,
     marginBottom: 8,
+    overflow: "hidden",
+  },
+  songRowContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 12,
+    justifyContent: "space-between",
   },
   songImage: { width: 40, height: 40, borderRadius: 6, marginRight: 12 },
-  songTitle: { color: "#fff", fontSize: 16, flex: 1 },
+  songTitle: { fontSize: 16, flex: 1 },
   deleteButton: {
     backgroundColor: "red",
     justifyContent: "center",
     alignItems: "center",
-    width: 80,
-    marginBottom: 8,
-    borderRadius: 8,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    marginLeft: 8,
   },
   controls: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 16,
   },
-  controlText: { color: "#1DB954", fontSize: 16, fontWeight: "bold" },
+  controlText: { fontSize: 16, fontWeight: "bold" },
 });
