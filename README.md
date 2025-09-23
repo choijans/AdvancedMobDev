@@ -55,5 +55,11 @@ In this activity, we created a profile screen form wherein we can update the tex
 |-----------|---------|---------|---------|
 |  <img width="220" alt="image" src="https://github.com/user-attachments/assets/33417eae-686e-4a62-b498-1c79b467e08c" /> | <img width="200" alt="image" src="https://github.com/user-attachments/assets/eff75638-13b0-4b2e-8d8d-b8822a5960b6" /> |<img width="200" alt="image" src="https://github.com/user-attachments/assets/6375a193-ada1-4dd7-b414-a050fcd9e3a0" /> | <img width="200" src="https://github.com/user-attachments/assets/69c58b4e-377a-42ee-a9dc-79358af3285b" /> |
 
+### Week 5 Activity 1
+In this activity, we focused on theme switching and we implemented a theme toggle with Redux, animations, and custom options shown in the pages below. I also implemented persistence and tested by closing the app and reopening it. After reopening, the theme colors that was set beforehand was still shown when the app opened. To create the themes, you need to create a redux hook, store, and themeslice then wrapping your pages with the themeSlice. 
+
+| Settings with Theme Selector |  Changed theme color | Checking other pages if affected | 
+|-----------|---------|---------|
+|  <img width="220" alt="image" src="https://github.com/user-attachments/assets/0b0404c3-9e7c-4a95-8d34-04a8926a2e5d" /> | <img width="220" alt="image" src="https://github.com/user-attachments/assets/0905efac-4e1e-4d96-9fc0-c2dcd9bf24c3" /> | <img width="220" alt="image" src="https://github.com/user-attachments/assets/9c716ff5-2240-43fc-976a-6f1590a325a3" /> | 
 
 
