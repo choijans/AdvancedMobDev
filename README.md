@@ -50,3 +50,10 @@ In this activity, we focused on theme switching and we implemented a theme toggl
 |-----------|---------|---------|
 |  <img width="220" alt="image" src="https://github.com/user-attachments/assets/0b0404c3-9e7c-4a95-8d34-04a8926a2e5d" /> | <img width="220" alt="image" src="https://github.com/user-attachments/assets/0905efac-4e1e-4d96-9fc0-c2dcd9bf24c3" /> | <img width="220" alt="image" src="https://github.com/user-attachments/assets/9c716ff5-2240-43fc-976a-6f1590a325a3" /> | 
 
+### Week 5 Activity 2
+In this activity, we focused on camera and filters. We set up camera using expo camera and applied filters and editing tools. We also added filter intensity sliders. I tested by downloading Expo Go on my mobile device and the pictures attached below show them. There is also persistence wherein if i close the app, the picture i captured was still shown there.
+
+| Camera in Mobile Device Expo Go |  Profile Page has Menu Pop for Camera or Gallery | Checking if it updated the profile page| 
+|-----------|---------|---------|
+|  <img width="220" alt="image" src="https://github.com/user-attachments/assets/e5940359-6261-45a0-8fad-0de90ae4bcca" /> | <img width="414" width="220"  src="https://github.com/user-attachments/assets/4dfb4a2f-052e-46fd-a15e-0bfd014cf822" /> | <img width="220" alt="image" src="https://github.com/user-attachments/assets/ad270885-df62-44d5-af6b-ada47198641f" /> | 
+
