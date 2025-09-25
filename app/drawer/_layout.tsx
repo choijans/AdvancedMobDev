@@ -9,6 +9,7 @@ import PlaylistDetailScreen from "./PlaylistDetailScreen"; // 👈 import your d
 import PlaylistsScreen from "./PlaylistsScreen";
 import ProfileScreen from "./ProfileScreen";
 import SettingsScreen from "./SettingsScreen";
+import CameraScreen from "../camera/CameraScreen";
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,6 +33,15 @@ function PlaylistsStack() {
           headerTintColor: "#fff",
         })}
       />
+      <Stack.Screen
+        name="CameraScreen"
+        component={CameraScreen}
+        options={{
+            title: "Camera",
+            headerStyle: { backgroundColor: "#000" },
+            headerTintColor: "#fff",
+        }}
+    />
     </Stack.Navigator>
   );
 }
